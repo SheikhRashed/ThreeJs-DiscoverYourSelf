@@ -67,7 +67,7 @@ gui.addColor(col, 'color').onChange(() => pointLight.color.set(col.color));
  * Sizes
  */
 const sizes = {
-  width: window.innerWidth,
+  width: window.innerWidth * 1.2,
   height: window.innerHeight,
 };
 
