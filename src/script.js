@@ -109,6 +109,7 @@ scene.add(camera);
  */
 const renderer = new THREE.WebGLRenderer({
   canvas: canvas,
+  alpha: true,
 });
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -116,6 +117,12 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 /**
  * Animate
  */
+
+document.addEventListener('mousemove', animateTerrain);
+let mouseY = 0;
+function animateTerrain(e) {
+  mouseY = e.clientY;
+}
 
 const clock = new THREE.Clock();
 
@@ -125,6 +132,7 @@ const tick = () => {
   // Update objects
   //   sphere.rotation.y = 0.5 * elapsedTime;
   plane.rotation.z = 0.5 * elapsedTime;
+  plane.material.displacementScale = 0.3 + mouseY * 0.0012;
 
   // Update Orbital Controls
   // controls.update()
