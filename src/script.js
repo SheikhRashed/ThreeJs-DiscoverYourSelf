@@ -3,6 +3,12 @@ import * as THREE from 'three';
 // import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'dat.gui';
 
+// Texture Loader
+const loader = new THREE.TextureLoader();
+const height = loader.load('height2.png');
+const texture = loader.load('mountain.jpg');
+const alpha = loader.load('/alpha.png');
+
 // Debug
 const gui = new dat.GUI();
 
@@ -19,13 +25,19 @@ const geometry = new THREE.PlaneBufferGeometry(3, 3, 64, 64);
 
 // Materials
 const material = new THREE.MeshStandardMaterial({
-  color: 'red',
+  color: 'gray',
+  map: texture,
+  displacementMap: height,
+  displacementScale: 0.6,
+  alphaMap: alpha,
+  transparent: true,
+  depthTest: false,
 });
 const plane = new THREE.Mesh(geometry, material);
 
 scene.add(plane);
 plane.rotation.x = 181;
-gui.add(plane.rotation, 'x').min(0).max(360);
+gui.add(plane.rotation, 'x').min(0).max(600);
 
 // const material = new THREE.MeshBasicMaterial()
 // material.color = new THREE.Color(0xff0000)
@@ -37,11 +49,19 @@ gui.add(plane.rotation, 'x').min(0).max(360);
 
 // Lights
 
-const pointLight = new THREE.PointLight(0xffffff, 0.1);
-pointLight.position.x = 2;
-pointLight.position.y = 3;
-pointLight.position.z = 4;
+const pointLight = new THREE.PointLight('#00b3ff', 2);
+pointLight.position.x = 0.2;
+pointLight.position.y = 10;
+pointLight.position.z = 4.4;
 scene.add(pointLight);
+
+gui.add(pointLight.position, 'x').min(0).max(26);
+gui.add(pointLight.position, 'y').min(0).max(26);
+gui.add(pointLight.position, 'z').min(0).max(26);
+
+// Colors
+const col = { color: '#000' };
+gui.addColor(col, 'color').onChange(() => pointLight.color.set(col.color));
 
 /**
  * Sizes
@@ -104,6 +124,7 @@ const tick = () => {
 
   // Update objects
   //   sphere.rotation.y = 0.5 * elapsedTime;
+  plane.rotation.z = 0.5 * elapsedTime;
 
   // Update Orbital Controls
   // controls.update()
